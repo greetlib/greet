@@ -1,0 +1,30 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.0-beta-3'
+    compile 'io.netty:netty-all:5.0.0.Alpha1'
+    compile 'org.apache.logging.log4j:log4j-core:2.0.2'
+    compile 'org.apache.logging.log4j:log4j-api:2.0.2'
+    testCompile 'junit:junit:4.12-beta-2'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir "src/main/groovy"
+        }
+    }
+    test {
+        groovy {
+            srcDir "src/test/groovy"
+        }
+    }
+}
