@@ -1,7 +1,8 @@
 package com.github.b2ojustin.irclibrary
 
 import com.github.b2ojustin.irclibrary.event.EventManager
-import com.github.b2ojustin.irclibrary.net.IRCAdapter
+import com.github.b2ojustin.irclibrary.net.ResponseAdapter
+import com.github.b2ojustin.irclibrary.net.ResponseDecoder
 import groovy.util.logging.Log4j2
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.*
@@ -17,7 +18,10 @@ class IRCConnection implements EventListener {
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
-            ch.pipeline().addLast new IRCAdapter(IRCConnection.this)
+            ch.pipeline().addLast(
+                    new ResponseDecoder(),
+                    new ResponseAdapter(IRCConnection.this)
+            )
             log.info "Initialized channel."
         }
     }
