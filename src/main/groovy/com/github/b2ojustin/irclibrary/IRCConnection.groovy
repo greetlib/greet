@@ -21,7 +21,7 @@ class IRCConnection implements EventListener {
         protected void initChannel(Channel ch) throws Exception {
             ch.pipeline().addLast(
                     new ResponseDecoder(),
-                    new ResponseAdapter(IRCConnection.this),
+                    new ResponseAdapter(),
                     new EventAdapter(IRCConnection.this)
             )
             log.info "Initialized channel."
