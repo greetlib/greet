@@ -1,8 +1,6 @@
 package com.github.b2ojustin.irclibrary
 
-import org.junit.Before
 import org.junit.Test
-
 
 class IRCConnectionTest extends GroovyTestCase {
     IRCConnection conn = new IRCConnection()

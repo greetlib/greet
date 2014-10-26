@@ -1,19 +1,11 @@
 package com.github.b2ojustin.irclibrary.net
 
-import com.github.b2ojustin.irclibrary.IRCConnection
 import groovy.util.logging.Log4j2
 import io.netty.channel.ChannelHandlerAdapter
 import io.netty.channel.ChannelHandlerContext
 
 @Log4j2
 class ResponseAdapter extends ChannelHandlerAdapter {
-    private IRCConnection connection;
-
-
-    public ResponseAdapter(IRCConnection connection) {
-        this.connection = connection
-    }
-
     @Override
     void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         log.error cause.getMessage(), cause

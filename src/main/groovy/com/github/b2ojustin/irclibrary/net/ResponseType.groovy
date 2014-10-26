@@ -1,8 +1,5 @@
 package com.github.b2ojustin.irclibrary.net
 
-import java.util.function.Consumer
-
-
 public enum ResponseType {
     WELCOME_MESSAGE("001")
 

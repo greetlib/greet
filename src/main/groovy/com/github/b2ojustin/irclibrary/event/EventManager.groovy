@@ -39,6 +39,7 @@ class EventManager {
     }
 
     void fireEvent(Event event) {
+        log.info "Firing event\n${event.dump()}"
         Map<EventListener, ArrayList<Method>> handlers = methodMap.get(event.class)
         handlers?.each { entry ->
             entry.value.forEach { it.invoke(entry.key, event) }
