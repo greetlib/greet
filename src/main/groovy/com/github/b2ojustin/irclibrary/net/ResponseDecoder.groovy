@@ -13,6 +13,11 @@ class ResponseDecoder extends LineBasedFrameDecoder {
     }
 
     @Override
+    void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error "Exception caught in channel pipeline", cause
+    }
+
+    @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
         buffer = super.decode(ctx, buffer) as ByteBuf
         if(buffer == null) return ""

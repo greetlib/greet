@@ -1,5 +1,6 @@
 package com.github.b2ojustin.irclibrary
 
+import com.github.b2ojustin.irclibrary.event.EventListener
 import com.github.b2ojustin.irclibrary.event.EventManager
 import com.github.b2ojustin.irclibrary.net.EventAdapter
 import com.github.b2ojustin.irclibrary.net.ResponseAdapter
@@ -10,6 +11,7 @@ import io.netty.channel.*
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioSocketChannel
 
+@SuppressWarnings("GroovyUnusedDeclaration")
 @Log4j2
 class IRCConnection implements EventListener {
     EventManager eventManager

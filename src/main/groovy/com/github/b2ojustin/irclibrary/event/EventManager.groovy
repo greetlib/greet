@@ -6,7 +6,7 @@ import java.lang.reflect.Method
 
 @Log4j2
 class EventManager {
-    Map<Class<Event>, Map<EventListener, ArrayList<Method>>> methodMap = new HashMap<>()
+    Map<Class<Event>, Map<EventListener, ArrayList<Method>>> methodMap = new LinkedHashMap<>()
 
     void addListener(EventListener listener) {
         listener.class.getDeclaredMethods().findAll({
@@ -39,7 +39,7 @@ class EventManager {
     }
 
     void fireEvent(Event event) {
-        log.info "Firing event\n${event.dump()}"
+        log.info "Firing event ${event.class.simpleName}"
         Map<EventListener, ArrayList<Method>> handlers = methodMap.get(event.class)
         handlers?.each { entry ->
             entry.value.forEach { it.invoke(entry.key, event) }
