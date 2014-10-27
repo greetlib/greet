@@ -31,7 +31,7 @@ class EventManager {
     }
 
     synchronized private registerMethod(Class<Event> clazz, Method method, EventListener listener) {
-        Map<EventListener, ArrayList<Method>> listenerMap = methodMap.getOrDefault clazz, new HashMap<>()
+        Map<EventListener, ArrayList<Method>> listenerMap = methodMap.getOrDefault clazz, new LinkedHashMap<>()
         ArrayList<Method> methods = listenerMap.getOrDefault listener, new ArrayList<>()
         methods.add method
         listenerMap.put listener, methods
@@ -41,17 +41,20 @@ class EventManager {
 
     void fireEvent(Event event) {
         log.trace "Firing event ${event.class.simpleName}"
-        def classMap = methodMap.findAll {
-            it.key.isAssignableFrom(event.class)
-        }
-        classMap.each {
-            def listenerMap = it.value
-            listenerMap.each {
-                for(Method method : it.value) {
-                    it.key.invokeMethod(method.name, event)
+        LinkedHashMap<EventListener, ArrayList<Method>> listenerMap = new LinkedHashMap<>()
+        methodMap.each {
+            if(it.key.isAssignableFrom(event.class)) {
+                it.value.each {
+                    ArrayList<Method> methods = listenerMap.get(it.key, new ArrayList())
+                    methods.addAll(it.value)
+                    listenerMap.put(it.key, methods)
                 }
             }
         }
-
+        listenerMap.each {
+            for(Method method : it.value) {
+                method.invoke(it.key, event)
+            }
+        }
     }
 }

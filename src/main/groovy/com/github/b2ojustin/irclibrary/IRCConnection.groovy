@@ -2,6 +2,7 @@ package com.github.b2ojustin.irclibrary
 
 import com.github.b2ojustin.irclibrary.event.EventManager
 import com.github.b2ojustin.irclibrary.listeners.IRCProtocolListener
+import com.github.b2ojustin.irclibrary.listeners.ServerInfoListener
 import com.github.b2ojustin.irclibrary.net.*
 import groovy.util.logging.Log4j2
 import io.netty.bootstrap.Bootstrap
@@ -12,12 +13,13 @@ import io.netty.channel.socket.nio.NioSocketChannel
 @SuppressWarnings("GroovyUnusedDeclaration")
 @Log4j2
 class IRCConnection {
-    EventManager eventManager
+    final EventManager eventManager
     private Channel channel;
     private Bootstrap bootStrap;
     private EventLoopGroup workerGroup
 
-    UserInfo userInfo
+    final UserInfo userInfo
+    final ServerInfo serverInfo = new ServerInfo()
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
@@ -35,7 +37,12 @@ class IRCConnection {
         log.trace "Initializing"
         this.eventManager = eventManager
         this.userInfo = userInfo
+        addBaseListeners()
+    }
+
+    protected addBaseListeners() {
         eventManager.addListener(new IRCProtocolListener(this))
+        eventManager.addListener(new ServerInfoListener(this))
     }
 
     ChannelFuture connect(String host, int port) {

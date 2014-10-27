@@ -5,6 +5,7 @@ import com.github.b2ojustin.irclibrary.event.EventHandler
 import com.github.b2ojustin.irclibrary.event.EventListener
 import com.github.b2ojustin.irclibrary.event.irc.ConnectionEvent
 import com.github.b2ojustin.irclibrary.event.irc.NoticeEvent
+import com.github.b2ojustin.irclibrary.event.irc.PingEvent
 import com.github.b2ojustin.irclibrary.event.irc.ServerResponseEvent
 import com.github.b2ojustin.irclibrary.net.UserInfo
 import com.github.b2ojustin.irclibrary.util.CommandUtil
@@ -17,7 +18,7 @@ class IRCProtocolListener implements EventListener {
     private EventListener connectionListener = new EventListener() {
         @EventHandler
         void onNotice(NoticeEvent event) {
-            new Timer().runAfter(10000) {
+            new Timer().runAfter(5000) {
                 UserInfo userInfo = con.userInfo
                 CommandUtil.sendCommand con, "PASS", [userInfo.password]
                 CommandUtil.sendCommand con, "USER", [userInfo.userName, '0', '*'], userInfo.realName
@@ -46,5 +47,11 @@ class IRCProtocolListener implements EventListener {
         else {
             log.info event.serverResponse.rawData
         }
+    }
+
+    @EventHandler
+    void onPingEvent(PingEvent event) {
+        CommandUtil.sendCommand con, "PONG", [], event.serverResponse.trail
+        log.info "PONG!"
     }
 }
