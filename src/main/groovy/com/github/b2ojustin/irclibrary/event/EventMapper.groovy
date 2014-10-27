@@ -3,6 +3,7 @@ package com.github.b2ojustin.irclibrary.event
 import com.github.b2ojustin.irclibrary.IRCConnection
 import com.github.b2ojustin.irclibrary.event.irc.Event
 import com.github.b2ojustin.irclibrary.event.irc.NoticeEvent
+import com.github.b2ojustin.irclibrary.event.irc.PingEvent
 import com.github.b2ojustin.irclibrary.event.irc.ServerResponseEvent
 import com.github.b2ojustin.irclibrary.net.ResponseType
 import com.github.b2ojustin.irclibrary.net.ServerResponse
@@ -15,6 +16,7 @@ class EventMapper {
 
     public EventMapper() {
         commandMap.put("NOTICE", NoticeEvent.class)
+        commandMap.put("PING", PingEvent.class)
 
         // Add default
         eventMap.put(ServerResponseEvent.class, { ServerResponse serverResponse, IRCConnection connection ->

@@ -41,6 +41,7 @@ class IRCProtocolListener implements EventListener {
     void onServerResponse(ServerResponseEvent event) {
         if(event.responseType == null) {
             log.warn "Unknown response code ${event.serverResponse.command}"
+            log.warn "Raw: ${event.serverResponse.rawData}"
         }
         else {
             log.info event.serverResponse.rawData
