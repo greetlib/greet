@@ -1,16 +1,31 @@
 package com.github.b2ojustin.irclibrary.event
 
 import com.github.b2ojustin.irclibrary.IRCConnection
+import com.github.b2ojustin.irclibrary.event.irc.Event
+import com.github.b2ojustin.irclibrary.event.irc.NoticeEvent
+import com.github.b2ojustin.irclibrary.event.irc.ServerResponseEvent
+import com.github.b2ojustin.irclibrary.net.ResponseType
 import com.github.b2ojustin.irclibrary.net.ServerResponse
 
 
 class EventMapper {
     final protected Map<Class<Event>, Closure<Event>> eventMap = new HashMap<>()
-    final protected Map<String, Class<Event>> commandMap = new HashMap<>()
+    final protected Map<Object, Class<Event>> commandMap = new HashMap<>()
 
     public EventMapper() {
         commandMap.put("NOTICE", NoticeEvent.class)
 
+        // Add default
+        eventMap.put(ServerResponseEvent.class, { ServerResponse serverResponse, IRCConnection connection ->
+            EventBuilder.build {
+                setConnection connection
+                setServerResponse serverResponse
+                setResponseType(ResponseType.byCode(serverResponse.command))
+                setType ServerResponseEvent.class
+                buildEvent()
+            }})
+
+        // Map rCode to events
         commandMap.each {
             final String key = it.key
             final Class<Event> value = it.value
@@ -18,6 +33,7 @@ class EventMapper {
                 EventBuilder.build {
                     setConnection connection
                     setServerResponse serverResponse
+                    setResponseType(ResponseType.byCode(serverResponse.command))
                     setType value
                     // Extras
 
@@ -34,7 +50,7 @@ class EventMapper {
     }
 
     Event build(ServerResponse serverResponse, IRCConnection connection) {
-        return eventMap.get(commandMap.get(serverResponse.command)).call(serverResponse, connection)
+        return eventMap.get(commandMap.get(serverResponse.command, ServerResponseEvent.class)).call(serverResponse, connection)
     }
 
     boolean isMapped(String command) {

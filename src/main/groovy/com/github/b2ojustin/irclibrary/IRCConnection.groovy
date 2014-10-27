@@ -2,9 +2,11 @@ package com.github.b2ojustin.irclibrary
 
 import com.github.b2ojustin.irclibrary.event.EventListener
 import com.github.b2ojustin.irclibrary.event.EventManager
+import com.github.b2ojustin.irclibrary.listeners.IRCProtocolListener
 import com.github.b2ojustin.irclibrary.net.EventAdapter
 import com.github.b2ojustin.irclibrary.net.ResponseAdapter
 import com.github.b2ojustin.irclibrary.net.ResponseDecoder
+import com.github.b2ojustin.irclibrary.net.UserInfo
 import groovy.util.logging.Log4j2
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.*
@@ -13,11 +15,13 @@ import io.netty.channel.socket.nio.NioSocketChannel
 
 @SuppressWarnings("GroovyUnusedDeclaration")
 @Log4j2
-class IRCConnection implements EventListener {
+class IRCConnection {
     EventManager eventManager
     private Channel channel;
     private Bootstrap bootStrap;
     private EventLoopGroup workerGroup
+
+    UserInfo userInfo
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
@@ -30,13 +34,15 @@ class IRCConnection implements EventListener {
         }
     }
 
-    IRCConnection(EventManager eventManager = new EventManager()) {
+    IRCConnection(UserInfo userInfo, EventManager eventManager = new EventManager()) {
         log.info "Initializing"
         this.eventManager = eventManager
+        this.userInfo = userInfo
+        eventManager.addListener(new IRCProtocolListener(this))
     }
 
-    public ChannelFuture connect(String host, int port) {
-        if(bootStrap != null) {
+    ChannelFuture connect(String host, int port) {
+        if (bootStrap != null) {
             log.info "Shutting down previous connection."
             workerGroup.shutdownGracefully()
             channel.close().sync()
@@ -52,12 +58,12 @@ class IRCConnection implements EventListener {
             ChannelFuture cf = bootStrap.connect(host, port)
             channel = cf.channel()
             return cf
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             log.error "Could not initiate connection", ex
+            return null
         }
     }
 
-    public Channel getChannel() {
-        return channel
-    }
+    public getChannel() { channel }
+
 }

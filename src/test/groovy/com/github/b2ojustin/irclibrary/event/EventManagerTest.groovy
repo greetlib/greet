@@ -1,5 +1,6 @@
 package com.github.b2ojustin.irclibrary.event
 
+import com.github.b2ojustin.irclibrary.event.irc.ConnectionEvent
 import org.junit.Before
 import org.junit.Test
 

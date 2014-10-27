@@ -1,5 +1,6 @@
 package com.github.b2ojustin.irclibrary.event
 
+import com.github.b2ojustin.irclibrary.event.irc.Event
 import groovy.util.logging.Log4j2
 
 import java.lang.reflect.Method
