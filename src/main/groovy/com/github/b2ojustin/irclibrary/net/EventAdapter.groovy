@@ -1,9 +1,9 @@
 package com.github.b2ojustin.irclibrary.net
 
 import com.github.b2ojustin.irclibrary.IRCConnection
-import com.github.b2ojustin.irclibrary.event.irc.ConnectionEvent
 import com.github.b2ojustin.irclibrary.event.EventBuilder
 import com.github.b2ojustin.irclibrary.event.EventMapper
+import com.github.b2ojustin.irclibrary.event.irc.ConnectionEvent
 import groovy.util.logging.Log4j2
 import io.netty.channel.ChannelHandlerAdapter
 import io.netty.channel.ChannelHandlerContext

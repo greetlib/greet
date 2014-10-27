@@ -1,12 +1,8 @@
 package com.github.b2ojustin.irclibrary
 
-import com.github.b2ojustin.irclibrary.event.EventListener
 import com.github.b2ojustin.irclibrary.event.EventManager
 import com.github.b2ojustin.irclibrary.listeners.IRCProtocolListener
-import com.github.b2ojustin.irclibrary.net.EventAdapter
-import com.github.b2ojustin.irclibrary.net.ResponseAdapter
-import com.github.b2ojustin.irclibrary.net.ResponseDecoder
-import com.github.b2ojustin.irclibrary.net.UserInfo
+import com.github.b2ojustin.irclibrary.net.*
 import groovy.util.logging.Log4j2
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.*
@@ -28,7 +24,8 @@ class IRCConnection {
             ch.pipeline().addLast(
                     new ResponseDecoder(),
                     new ResponseAdapter(),
-                    new EventAdapter(IRCConnection.this)
+                    new EventAdapter(IRCConnection.this),
+                    new StringEncoder()
             )
             log.info "Initialized channel."
         }

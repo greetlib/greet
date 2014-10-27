@@ -17,7 +17,6 @@ class ResponseAdapter extends ChannelHandlerAdapter {
         msg = msg as String
         if(msg.isEmpty()) {
             log.warn "Received empty string from decoder."
-            ctx.fireChannelRead(msg)
             return
         }
         List<String> parts = msg.split(":")

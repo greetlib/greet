@@ -20,7 +20,7 @@ class ResponseDecoder extends LineBasedFrameDecoder {
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf buffer) throws Exception {
         buffer = super.decode(ctx, buffer) as ByteBuf
-        if(buffer == null) return ""
+        if(buffer == null) return null
         else {
             byte[] data = new byte[buffer.readableBytes()]
             buffer.readBytes(data)

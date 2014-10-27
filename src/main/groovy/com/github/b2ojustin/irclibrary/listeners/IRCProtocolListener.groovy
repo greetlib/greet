@@ -17,12 +17,12 @@ class IRCProtocolListener implements EventListener {
     private EventListener connectionListener = new EventListener() {
         @EventHandler
         void onNotice(NoticeEvent event) {
-            UserInfo userInfo = con.userInfo
-            if(con.userInfo.password) {
+            new Timer().runAfter(10000) {
+                UserInfo userInfo = con.userInfo
                 CommandUtil.sendCommand con, "PASS", [userInfo.password]
+                CommandUtil.sendCommand con, "USER", [userInfo.userName, '0', '*'], userInfo.realName
+                CommandUtil.sendCommand con, "NICK", [userInfo.nickName]
             }
-            CommandUtil.sendCommand con, "USER", ['0', '0'], userInfo.realName
-            CommandUtil.sendCommand con, "NICK", [userInfo.nickName]
             con.eventManager.removeListener(this)
         }
     }
@@ -33,6 +33,7 @@ class IRCProtocolListener implements EventListener {
 
     @EventHandler
     void onConnected(ConnectionEvent event) {
+        // Wait for server to send connection notices
         con.eventManager.addListener(connectionListener)
     }
 
