@@ -6,8 +6,9 @@ import com.github.b2ojustin.irclibrary.event.irc.NoticeEvent
 import com.github.b2ojustin.irclibrary.event.irc.ServerResponseEvent
 import com.github.b2ojustin.irclibrary.net.ResponseType
 import com.github.b2ojustin.irclibrary.net.ServerResponse
+import groovy.util.logging.Log4j2
 
-
+@Log4j2
 class EventMapper {
     final protected Map<Class<Event>, Closure<Event>> eventMap = new HashMap<>()
     final protected Map<Object, Class<Event>> commandMap = new HashMap<>()
@@ -50,7 +51,7 @@ class EventMapper {
     }
 
     Event build(ServerResponse serverResponse, IRCConnection connection) {
-        return eventMap.get(commandMap.get(serverResponse.command, ServerResponseEvent.class)).call(serverResponse, connection)
+        eventMap.get(commandMap.get(serverResponse.command, ServerResponseEvent.class)).call(serverResponse, connection)
     }
 
     boolean isMapped(String command) {

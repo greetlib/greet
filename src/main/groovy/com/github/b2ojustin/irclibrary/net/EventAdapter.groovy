@@ -22,10 +22,8 @@ class EventAdapter extends ChannelHandlerAdapter {
     @Override
     void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ServerResponse resp = msg as ServerResponse
-        log.info "Server response: ${resp.rawData}"
-        if(eventMapper.isMapped(resp.command)) {
-            ircConnection.eventManager.fireEvent(eventMapper.build(resp, ircConnection))
-        }
+        log.trace "Server response: ${resp.rawData}"
+        ircConnection.eventManager.fireEvent(eventMapper.build(resp, ircConnection))
         ctx.fireChannelRead(msg)
     }
 
@@ -41,7 +39,6 @@ class EventAdapter extends ChannelHandlerAdapter {
             )
             push ircConnection.eventManager
         }
-        log.info "Event built and fired"
         ctx.connect(remoteAddress, localAddress, promise);
     }
 }

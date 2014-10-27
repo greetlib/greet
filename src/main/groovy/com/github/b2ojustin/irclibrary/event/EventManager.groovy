@@ -36,11 +36,11 @@ class EventManager {
         methods.add method
         listenerMap.put listener, methods
         methodMap.put clazz, listenerMap
-        log.info "Registered event handler ${listener.class}.${method.name} for ${method.getParameterTypes()[0].simpleName}"
+        log.debug "Registered event handler ${listener.class}.${method.name} for ${method.getParameterTypes()[0].simpleName}"
     }
 
     void fireEvent(Event event) {
-        log.info "Firing event ${event.class.simpleName}"
+        log.trace "Firing event ${event.class.simpleName}"
         Map<EventListener, ArrayList<Method>> handlers = methodMap.get(event.class)
         handlers?.each { entry ->
             entry.value.forEach { it.invoke(entry.key, event) }

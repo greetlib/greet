@@ -24,6 +24,7 @@ class EventBuilder {
         extras.putAll(
                 connection: connection,
                 serverResponse: serverResponse,
+                responseType: responseType
         )
         Event event = type.newInstance()
         extras.each {

@@ -27,12 +27,12 @@ class IRCConnection {
                     new EventAdapter(IRCConnection.this),
                     new StringEncoder()
             )
-            log.info "Initialized channel."
+            log.trace "Initialized channel."
         }
     }
 
     IRCConnection(UserInfo userInfo, EventManager eventManager = new EventManager()) {
-        log.info "Initializing"
+        log.trace "Initializing"
         this.eventManager = eventManager
         this.userInfo = userInfo
         eventManager.addListener(new IRCProtocolListener(this))
@@ -45,7 +45,7 @@ class IRCConnection {
             channel.close().sync()
         };
         try {
-            log.info "Initializing connection to $host:$port"
+            log.trace "Initializing connection to $host:$port"
             workerGroup = new NioEventLoopGroup()
             bootStrap = new Bootstrap()
             bootStrap.group workerGroup
