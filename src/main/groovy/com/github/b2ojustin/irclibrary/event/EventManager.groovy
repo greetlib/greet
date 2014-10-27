@@ -7,9 +7,9 @@ import java.lang.reflect.Method
 
 @Log4j2
 class EventManager {
-    Map<Class<Event>, Map<EventListener, ArrayList<Method>>> methodMap = new LinkedHashMap<>()
+    final Map<Class<Event>, LinkedHashMap<EventListener, ArrayList<Method>>> methodMap = new LinkedHashMap<>()
 
-    void addListener(EventListener listener) {
+    synchronized addListener(EventListener listener) {
         listener.class.getDeclaredMethods().findAll({
             it.getAnnotationsByType(EventHandler.class).length != 0 &&
             it.getParameterTypes().length == 1 &&
@@ -19,7 +19,7 @@ class EventManager {
         }
     }
 
-    void removeListener(EventListener listener) {
+    synchronized void removeListener(EventListener listener) {
         listener.class.getDeclaredMethods().findAll({
             it.getAnnotationsByType(EventHandler.class).length != 0 &&
             methodMap.containsKey(it.getParameterTypes()[0]) &&
@@ -30,7 +30,7 @@ class EventManager {
         }
     }
 
-    private registerMethod(Class<Event> clazz, Method method, EventListener listener) {
+    synchronized private registerMethod(Class<Event> clazz, Method method, EventListener listener) {
         Map<EventListener, ArrayList<Method>> listenerMap = methodMap.getOrDefault clazz, new HashMap<>()
         ArrayList<Method> methods = listenerMap.getOrDefault listener, new ArrayList<>()
         methods.add method
@@ -41,9 +41,17 @@ class EventManager {
 
     void fireEvent(Event event) {
         log.trace "Firing event ${event.class.simpleName}"
-        Map<EventListener, ArrayList<Method>> handlers = methodMap.get(event.class)
-        handlers?.each { entry ->
-            entry.value.forEach { it.invoke(entry.key, event) }
+        def classMap = methodMap.findAll {
+            it.key.isAssignableFrom(event.class)
         }
+        classMap.each {
+            def listenerMap = it.value
+            listenerMap.each {
+                for(Method method : it.value) {
+                    it.key.invokeMethod(method.name, event)
+                }
+            }
+        }
+
     }
 }

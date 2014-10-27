@@ -12,7 +12,7 @@ class CommandUtil {
         }
         if(trail) raw += ":$trail"
         raw += "\r\n"
-        log.info "Write: ${raw.trim()}"
+        log.trace "Write: ${raw.trim()}"
         con.channel.writeAndFlush(raw)
     }
 }

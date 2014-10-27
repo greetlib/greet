@@ -1,4 +1,4 @@
 package com.github.b2ojustin.irclibrary.event.irc
 
-class NoticeEvent extends Event {
+class NoticeEvent extends ServerResponseEvent {
 }

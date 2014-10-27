@@ -34,8 +34,9 @@ class ResponseAdapter extends ChannelHandlerAdapter {
                 channel: ctx.channel()
         ]
         // Handling for special responses
-        if(msg.startsWith("PING")) r.command = "PING"
-
+        if(!msg.startsWith(":")) {
+            r.command = msg.substring(0, msg.indexOf(" "))
+        }
         ctx.fireChannelRead(r)
     }
 
