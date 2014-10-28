@@ -3,6 +3,7 @@ if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
   echo -e "Updating gh-pages\n"
 
   #copy data we're interested in to other place
+  mkdir -p $HOME/reports/tests
   cp -R build/reports/tests $HOME/reports/tests
 
   #go to home and setup git
