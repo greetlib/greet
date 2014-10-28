@@ -1,6 +1,6 @@
 language: groovy
 jdk:
-- oraclejdk8
+  - oraclejdk8
 env:
   global:
     secure: kCSQRo7+BwPcQ/IMIYX0njGj35VGlyHDAfeMzA+eu5y3sxuFTph5ufhHD1HZROWKG0gSBL9cMm/ahCYa345gFnh9XmLMVRUhnCXt0egDLDM+5rtbRxV8+60/j0CpdVwyRAtWGnIQBTh4MaMENVG3FX6ePWvofUue7Utf10gCUB8=
