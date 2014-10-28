@@ -19,4 +19,4 @@ notifications:
     - 'Compare: %{compare_url}'
     skip_join: true
 after_script:
-  - ./scripts/update-gh-pages.sh
+  - sh scripts/update-gh-pages.sh
