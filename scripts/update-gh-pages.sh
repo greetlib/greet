@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
   echo -e "Updating gh-pages\n"
 
   #copy data we're interested in to other place
