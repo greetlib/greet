@@ -2,7 +2,10 @@ package io.github.greetlib.greet
 
 import io.github.greetlib.greet.net.ClientInfo
 import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
 
+@Ignore("Not running connection tests.")
 class IRCConnectionTest extends GroovyTestCase {
     IRCConnection conn
 
@@ -16,6 +19,7 @@ class IRCConnectionTest extends GroovyTestCase {
         conn = new IRCConnection(userInfo)
     }
 
+    @Test
     void testConnect() {
         assertTrue "Unable to connect", conn.connect("chat.freenode.net", 6667).sync().success
     }
