@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   echo -e "Updating gh-pages\n"
 
   #copy data we're interested in to other place
@@ -19,7 +19,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 
   #add, commit and push files
   git add -f .
-  git commit -m "Travis - Test results $TRAVIS_REPO_SLUG($TRAVIS_COMMIT) #$TRAVIS_BUILD_NUMBER"
+  git commit -m "Travis - Test results ${TRAVIS_REPO_SLUG}(${TRAVIS_COMMIT}) #${TRAVIS_BUILD_NUMBER}"
   git push -fq origin master > /dev/null
 
   echo -e "Pushed test reports.\n"
