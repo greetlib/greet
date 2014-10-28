@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo -e "Updating gh-pages\n"
 
