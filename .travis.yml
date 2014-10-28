@@ -3,4 +3,7 @@ jdk:
   - oraclejdk8
 notifications:
   irc:
-    - "irc.esper.net#greet"
+    channels:
+      - "irc.esper.net#greet"
+    skip_join: true
+    
