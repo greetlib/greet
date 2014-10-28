@@ -16,7 +16,7 @@ class IRCConnectionTest extends GroovyTestCase {
         conn = new IRCConnection(userInfo)
     }
 
-    /*void testConnect() {
+    void testConnect() {
         assertTrue "Unable to connect", conn.connect("chat.freenode.net", 6667).sync().success
-    }*/
+    }
 }
