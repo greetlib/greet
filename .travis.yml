@@ -1,14 +1,16 @@
 language: groovy
 jdk:
   - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
 notifications:
   irc:
     channels:
       - "irc.esper.net#greet"
     template:
-          - "%{repository_name}/%{branch}(%{commit}) #%{build_number}: %{message} in %{duration}"
+          - "%{repository_name}/%{branch}(%{commit}) #%{build_number}: %{message} - %{duration}"
           - "%{commit_message} - %{author}"
-          - "Details: %{build_url} / Compare: %{compare_url}"
+          - "Details: %{build_url}"
+          - "Compare: %{compare_url}"
     skip_join: true
-    use_notice: true
-    
