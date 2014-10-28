@@ -1,10 +1,10 @@
 package io.github.greetlib.greet.net
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.EventBuilder
 import io.github.greetlib.greet.event.EventMapper
 import io.github.greetlib.greet.event.irc.ConnectionEvent
-import groovy.util.logging.Log4j2
 import io.netty.channel.ChannelHandlerAdapter
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelPromise

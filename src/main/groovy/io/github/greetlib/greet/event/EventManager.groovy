@@ -1,7 +1,7 @@
 package io.github.greetlib.greet.event
 
-import io.github.greetlib.greet.event.irc.Event
 import groovy.util.logging.Log4j2
+import io.github.greetlib.greet.event.irc.Event
 
 import java.lang.reflect.Method
 

@@ -1,17 +1,17 @@
 package io.github.greetlib.greet.example
 
 import io.github.greetlib.greet.IRCConnection
-import io.github.greetlib.greet.net.UserInfo
+import io.github.greetlib.greet.net.ClientInfo
 import io.netty.channel.Channel
 import io.netty.channel.ChannelFuture
 
 
 class ConnectExample {
     static void main(String[] args) {
-        UserInfo info = new UserInfo([
-                nickName: 'Test2738',
-                realName: 'Testing',
-                userName: "Test2738"
+        ClientInfo info = new ClientInfo([
+                nickName: 'GreetBot',
+                realName: 'GRoovy intErnet rElay chaT',
+                userName: "Greet"
         ])
 
         IRCConnection irc = new IRCConnection(info)

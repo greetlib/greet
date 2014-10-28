@@ -1,16 +1,14 @@
 package io.github.greetlib.greet
 
-import io.github.greetlib.greet.net.UserInfo
+import io.github.greetlib.greet.net.ClientInfo
 import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
 
 class IRCConnectionTest extends GroovyTestCase {
     IRCConnection conn
 
     @Before
     void setUp() {
-        UserInfo userInfo = [
+        ClientInfo userInfo = [
               userName: "Test",
               nickName: "Test2738",
               realName: "Testing",

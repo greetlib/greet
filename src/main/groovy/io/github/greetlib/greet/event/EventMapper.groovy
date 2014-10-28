@@ -1,13 +1,10 @@
 package io.github.greetlib.greet.event
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
-import io.github.greetlib.greet.event.irc.Event
-import io.github.greetlib.greet.event.irc.NoticeEvent
-import io.github.greetlib.greet.event.irc.PingEvent
-import io.github.greetlib.greet.event.irc.ServerResponseEvent
+import io.github.greetlib.greet.event.irc.*
 import io.github.greetlib.greet.net.ResponseType
 import io.github.greetlib.greet.net.ServerResponse
-import groovy.util.logging.Log4j2
 
 @Log4j2
 class EventMapper {
@@ -15,8 +12,9 @@ class EventMapper {
     final protected Map<Object, Class<Event>> commandMap = new HashMap<>()
 
     public EventMapper() {
-        commandMap.put("NOTICE", NoticeEvent.class)
-        commandMap.put("PING", PingEvent.class)
+        commandMap.put ResponseType.NOTICE.rCode, NoticeEvent.class
+        commandMap.put ResponseType.PING.rCode, PingEvent.class
+        commandMap.put ResponseType.END_OF_MOTD.rCode, MOTDEndEvent.class
 
         // Add default
         eventMap.put(ServerResponseEvent.class, { ServerResponse serverResponse, IRCConnection connection ->

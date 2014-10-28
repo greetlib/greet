@@ -1,7 +1,7 @@
 package io.github.greetlib.greet.util
 
-import io.github.greetlib.greet.IRCConnection
 import groovy.util.logging.Log4j2
+import io.github.greetlib.greet.IRCConnection
 
 @Log4j2
 class CommandUtil {

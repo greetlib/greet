@@ -1,10 +1,10 @@
 package io.github.greetlib.greet
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.event.EventManager
 import io.github.greetlib.greet.listeners.IRCProtocolListener
 import io.github.greetlib.greet.listeners.ServerInfoListener
 import io.github.greetlib.greet.net.*
-import groovy.util.logging.Log4j2
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.*
 import io.netty.channel.nio.NioEventLoopGroup
@@ -18,8 +18,9 @@ class IRCConnection {
     private Bootstrap bootStrap;
     private EventLoopGroup workerGroup
 
-    final UserInfo userInfo
+    final ClientInfo userInfo
     final ServerInfo serverInfo = new ServerInfo()
+    final Map<String, ChannelInfo> channelInfoMap = new LinkedHashMap<>();
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
@@ -33,7 +34,7 @@ class IRCConnection {
         }
     }
 
-    IRCConnection(UserInfo userInfo, EventManager eventManager = new EventManager()) {
+    IRCConnection(ClientInfo userInfo, EventManager eventManager = new EventManager()) {
         log.trace "Initializing"
         this.eventManager = eventManager
         this.userInfo = userInfo

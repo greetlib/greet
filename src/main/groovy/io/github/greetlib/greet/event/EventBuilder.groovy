@@ -1,10 +1,10 @@
 package io.github.greetlib.greet.event
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.irc.Event
 import io.github.greetlib.greet.net.ResponseType
 import io.github.greetlib.greet.net.ServerResponse
-import groovy.util.logging.Log4j2
 
 @Log4j2
 class EventBuilder {

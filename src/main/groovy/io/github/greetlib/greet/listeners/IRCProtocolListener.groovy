@@ -1,5 +1,6 @@
 package io.github.greetlib.greet.listeners
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.EventHandler
 import io.github.greetlib.greet.event.EventListener
@@ -7,19 +8,16 @@ import io.github.greetlib.greet.event.irc.ConnectionEvent
 import io.github.greetlib.greet.event.irc.NoticeEvent
 import io.github.greetlib.greet.event.irc.PingEvent
 import io.github.greetlib.greet.event.irc.ServerResponseEvent
-import io.github.greetlib.greet.net.UserInfo
+import io.github.greetlib.greet.net.ClientInfo
 import io.github.greetlib.greet.util.CommandUtil
-import groovy.util.logging.Log4j2
 
 @Log4j2
-class IRCProtocolListener implements EventListener {
-    private IRCConnection con
-
+class IRCProtocolListener extends BaseEventListener {
     private EventListener connectionListener = new EventListener() {
         @EventHandler
         void onNotice(NoticeEvent event) {
             new Timer().runAfter(5000) {
-                UserInfo userInfo = con.userInfo
+                ClientInfo userInfo = con.userInfo
                 CommandUtil.sendCommand con, "PASS", [userInfo.password]
                 CommandUtil.sendCommand con, "USER", [userInfo.userName, '0', '*'], userInfo.realName
                 CommandUtil.sendCommand con, "NICK", [userInfo.nickName]
@@ -29,7 +27,7 @@ class IRCProtocolListener implements EventListener {
     }
 
     IRCProtocolListener(IRCConnection con) {
-        this.con = con
+        super(con)
     }
 
     @EventHandler

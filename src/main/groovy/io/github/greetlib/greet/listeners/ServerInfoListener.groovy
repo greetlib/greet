@@ -1,12 +1,10 @@
 package io.github.greetlib.greet.listeners
 
+import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.EventHandler
-import io.github.greetlib.greet.event.EventListener
 import io.github.greetlib.greet.event.irc.ServerResponseEvent
 import io.github.greetlib.greet.net.ResponseType
-import io.github.greetlib.greet.net.ServerInfo
-import groovy.util.logging.Log4j2
 
 /**
  * Listener which populates the server information for the connection.
@@ -14,13 +12,9 @@ import groovy.util.logging.Log4j2
  */
 
 @Log4j2
-class ServerInfoListener implements EventListener {
-    final ServerInfo serverInfo;
-    final IRCConnection ircConnection;
-
-    ServerInfoListener(final IRCConnection ircConnection) {
-        this.serverInfo = ircConnection.serverInfo
-        this.ircConnection = ircConnection
+class ServerInfoListener extends BaseEventListener {
+    ServerInfoListener(IRCConnection con) {
+        super(con)
     }
 
     @EventHandler
@@ -56,7 +50,7 @@ class ServerInfoListener implements EventListener {
             case ResponseType.END_OF_MOTD:
                 log.info "Collected server info."
                 log.trace serverInfo.dump()
-                ircConnection.eventManager.removeListener(this)
+                con.eventManager.removeListener(this)
         }
     }
 }
