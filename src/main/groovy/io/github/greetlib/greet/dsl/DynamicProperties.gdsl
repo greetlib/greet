@@ -1,0 +1,7 @@
+package io.github.greetlib.greet.dsl
+
+contributor(context()) {
+    if(hasAnnotation("groovy.util.logging.Log4j2")) {
+        property name: 'log', type: "org.apache.logging.log4j.Logger"
+    }
+}

@@ -9,7 +9,7 @@
         <Root level="error">
             <AppenderRef ref="Console" />
         </Root>
-        <logger name="com.github.b2ojustin.irclibrary" level="DEBUG" />
+        <logger name="io.github.greetlib.greet" level="DEBUG" />
         <Root level="ERROR">
             <AppenderRef ref="CONSOLE"/>
         </Root>
