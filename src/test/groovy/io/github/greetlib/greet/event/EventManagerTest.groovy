@@ -51,7 +51,10 @@ class EventManagerTest extends GroovyTestCase {
     @Test
     void testFireEvent() {
         eM.addListener(eL)
-        ConnectionEvent event = [localAddress: "local", remoteAddress: "remote"]
+        ConnectionEvent event = [
+                localAddress: new InetSocketAddress("local", 0),
+                remoteAddress: new InetSocketAddress("remote", 0)
+        ]
         eM.fireEvent(event)
         println eL.event.dump()
         assertTrue "Handler was not called", eL.handlerCalled
