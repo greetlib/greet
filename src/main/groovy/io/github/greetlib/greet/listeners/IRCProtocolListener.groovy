@@ -3,7 +3,7 @@ package io.github.greetlib.greet.listeners
 import groovy.util.logging.Log4j2
 import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.EventHandler
-import io.github.greetlib.greet.event.EventListener
+import io.github.greetlib.greet.event.IRCEventListener
 import io.github.greetlib.greet.event.irc.*
 import io.github.greetlib.greet.net.ClientInfo
 import io.github.greetlib.greet.net.ResponseType
@@ -18,7 +18,7 @@ import io.github.greetlib.greet.util.CommandUtil
  */
 @Log4j2
 class IRCProtocolListener extends BaseEventListener {
-    private EventListener connectionListener = new EventListener() {
+    private IRCEventListener connectionListener = new IRCEventListener() {
         @EventHandler
         void onNotice(NoticeEvent event) {
             new Timer().runAfter(5000) {

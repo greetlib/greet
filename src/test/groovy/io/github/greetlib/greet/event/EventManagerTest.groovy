@@ -6,7 +6,7 @@ import org.junit.Test
 
 
 class EventManagerTest extends GroovyTestCase {
-    public final class TestEventListener implements EventListener {
+    public final class TestEventListener implements IRCEventListener {
         protected boolean handlerCalled = false
         protected boolean nonHandlerCalled = false
         protected ConnectionEvent event

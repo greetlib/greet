@@ -1,11 +1,11 @@
 package io.github.greetlib.greet.listeners
 
 import io.github.greetlib.greet.IRCConnection
-import io.github.greetlib.greet.event.EventListener
+import io.github.greetlib.greet.event.IRCEventListener
 import io.github.greetlib.greet.net.ChannelInfo
 import io.github.greetlib.greet.net.ServerInfo
 
-class BaseEventListener implements EventListener {
+class BaseEventListener implements IRCEventListener {
     protected final IRCConnection con
     protected final ServerInfo serverInfo
     protected final Map<String, ChannelInfo> channelInfoMap;

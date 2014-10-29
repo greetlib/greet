@@ -7,9 +7,9 @@ import java.lang.reflect.Method
 
 @Log4j2
 class EventManager {
-    final Map<Class<Event>, LinkedHashMap<EventListener, ArrayList<Method>>> methodMap = new LinkedHashMap<>()
+    final Map<Class<Event>, LinkedHashMap<IRCEventListener, ArrayList<Method>>> methodMap = new LinkedHashMap<>()
 
-    synchronized addListener(EventListener listener) {
+    synchronized addListener(IRCEventListener listener) {
         listener.class.getDeclaredMethods().findAll({
             it.getAnnotationsByType(EventHandler.class).length != 0 &&
             it.getParameterTypes().length == 1 &&
@@ -19,7 +19,7 @@ class EventManager {
         }
     }
 
-    synchronized void removeListener(EventListener listener) {
+    synchronized void removeListener(IRCEventListener listener) {
         listener.class.getDeclaredMethods().findAll({
             it.getAnnotationsByType(EventHandler.class).length != 0 &&
             methodMap.containsKey(it.getParameterTypes()[0]) &&
@@ -30,8 +30,8 @@ class EventManager {
         }
     }
 
-    synchronized private registerMethod(Class<Event> clazz, Method method, EventListener listener) {
-        Map<EventListener, ArrayList<Method>> listenerMap = methodMap.getOrDefault clazz, new LinkedHashMap<>()
+    synchronized private registerMethod(Class<Event> clazz, Method method, IRCEventListener listener) {
+        Map<IRCEventListener, ArrayList<Method>> listenerMap = methodMap.getOrDefault clazz, new LinkedHashMap<>()
         ArrayList<Method> methods = listenerMap.getOrDefault listener, new ArrayList<>()
         methods.add method
         listenerMap.put listener, methods
@@ -41,7 +41,7 @@ class EventManager {
 
     void fireEvent(Event event) {
         log.trace "Firing event ${event.class.simpleName}"
-        LinkedHashMap<EventListener, ArrayList<Method>> listenerMap = new LinkedHashMap<>()
+        LinkedHashMap<IRCEventListener, ArrayList<Method>> listenerMap = new LinkedHashMap<>()
         methodMap.each {
             if(it.key.isAssignableFrom(event.class)) {
                 it.value.each {

@@ -9,7 +9,7 @@ import io.github.greetlib.greet.net.ServerResponse
 /**
  * Custom events can be added by calling {@link EventMapper#mapEvent(io.github.greetlib.greet.net.ResponseType, java.lang.Class, groovy.lang.Closure)},
  * The preferred way of adding extraneous data to events, is first mapping them with {@link EventMapper#mapEvent(io.github.greetlib.greet.net.ResponseType, java.lang.Class, groovy.lang.Closure)}
- * then adding an {@link EventListener} at the top of the stack to populate data for that {@link Event}
+ * then adding an {@link IRCEventListener} at the top of the stack to populate data for that {@link Event}
  */
 @Log4j2
 class EventMapper {
