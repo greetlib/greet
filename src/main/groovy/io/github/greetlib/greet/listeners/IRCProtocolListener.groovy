@@ -67,8 +67,7 @@ class IRCProtocolListener extends BaseEventListener {
      */
     @EventHandler
     void onPing(PingEvent event) {
-        CommandUtil.sendCommand con, "PONG", [], event.serverResponse.trail
-        log.debug "Replied to PING"
+        CommandUtil.sendCommand con, "PONG", [], event.serverResponse.source
     }
 
     /**

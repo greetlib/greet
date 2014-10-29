@@ -12,7 +12,8 @@ class CommandUtil {
         }
         if(trail) raw += ":$trail"
         raw += "\r\n"
-        log.trace "Write: ${raw.trim()}"
         con.channel.writeAndFlush(raw)
+        log.info raw.trim()
+        return raw
     }
 }
