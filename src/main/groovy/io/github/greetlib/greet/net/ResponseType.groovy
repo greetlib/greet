@@ -21,12 +21,12 @@ public enum ResponseType {
 
     NOTICE('NOTICE'), PING('PING'), MODE('MODE'), ERROR('ERROR'), QUIT('QUIT')
 
-    def rCode
-    private ResponseType(def rCode) {
+    String rCode
+    private ResponseType(String rCode) {
         this.rCode = rCode
     }
 
-    static ResponseType byCode(def rCode) {
+    static ResponseType byCode(String rCode) {
         values().find { it.rCode == rCode }
     }
 }

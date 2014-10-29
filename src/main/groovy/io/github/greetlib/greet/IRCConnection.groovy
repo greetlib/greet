@@ -18,9 +18,10 @@ class IRCConnection {
     private Bootstrap bootStrap;
     private EventLoopGroup workerGroup
 
-    final ClientInfo userInfo
+    final ClientInfo clientInfo
     final ServerInfo serverInfo = new ServerInfo()
-    final Map<String, ChannelInfo> channelInfoMap = new LinkedHashMap<>();
+    final private Map<String, UserInfo> userInfoMap = new HashMap<>()
+    final private Map<String, ChannelInfo> channelInfoMap = new HashMap<>()
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
@@ -34,14 +35,14 @@ class IRCConnection {
         }
     }
 
-    IRCConnection(ClientInfo userInfo, EventManager eventManager = new EventManager()) {
+    IRCConnection(ClientInfo clientInfo, EventManager eventManager = new EventManager()) {
         log.trace "Initializing"
         this.eventManager = eventManager
-        this.userInfo = userInfo
+        this.clientInfo = clientInfo
         addBaseListeners()
     }
 
-    protected addBaseListeners() {
+    private addBaseListeners() {
         eventManager.addListener(new IRCProtocolListener(this))
         eventManager.addListener(new ServerInfoListener(this))
     }
@@ -70,5 +71,36 @@ class IRCConnection {
     }
 
     public getChannel() { channel }
+
+    /**
+     * @see #getUserInfo(java.lang.String)
+     * @param channel Channel name
+     * @param createIfNotExists Whether to create a new ChannelInfo instance if channel is unmapped.
+     * @return May be null only if 'createIfNotExists' is false and no existing channel has been mapped.
+     */
+    public ChannelInfo getChannelInfo(String channel, boolean createIfNotExists = false) {
+        ChannelInfo channelInfo = channelInfoMap.get(channel)
+        if(channelInfo == null && createIfNotExists) {
+            channelInfo = new ChannelInfo()
+            channelInfoMap.put(channel, channelInfo)
+        }
+        return channelInfo
+    }
+
+    /**
+     * Get {@link UserInfo} for 'nick'. If 'createIfNotExists' parameter is true,
+     * then a new {@link UserInfo} instance may be created and mapped.
+     * @param nick The nickname for the user
+     * @param createIfNotExists Whether to create a new {@link UserInfo} instance if nickname is unmapped.
+     * @return May be null only if 'createIfNotExists' is false and no existing nickname has been mapped.
+     */
+    public UserInfo getUserInfo(String nick, boolean createIfNotExists = false) {
+        UserInfo userInfo = userInfoMap.get(nick)
+        if(userInfo == null && createIfNotExists) {
+            userInfo = new UserInfo()
+            userInfoMap.put(nick, userInfo)
+        }
+        return userInfo
+    }
 
 }
