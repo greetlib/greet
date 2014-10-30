@@ -81,6 +81,7 @@ class IRCProtocolListener extends BaseEventListener {
         List<String> p = event.serverResponse.params
         switch(event.responseType) {
             case ResponseType.JOIN:
+            case ResponseType.PART:
                 event.channelInfo = con.getChannelInfo(p[0], true)
                 break
             case ResponseType.TOPIC:
@@ -131,6 +132,19 @@ class IRCProtocolListener extends BaseEventListener {
         event.userInfo = con.getUserInfo(nick, true)
         event.userInfo.channels.add(p[0])
         log.debug "Added $nick to channel ${p[0]}"
+    }
+
+    @EventHandler
+    void onPart(PartEvent event) {
+        List<String> p = event.serverResponse.params
+        String nick = event.serverResponse.source.substring(0,
+            event.serverResponse.source.indexOf("!")
+        )
+        event.channelInfo.users.remove(nick)
+        event.userInfo = con.getUserInfo(nick)
+        event.userInfo?.channels?.add(p[0])
+        event.reason = event.serverResponse.trail
+        log.debug "Removed $nick from ${p[0]}"
     }
 
     /**

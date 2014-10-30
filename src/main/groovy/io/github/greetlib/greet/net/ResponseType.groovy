@@ -21,7 +21,7 @@ public enum ResponseType {
     ERR_ERRONEUS_NICKNAME('423'), ERR_NICKNAME_IN_USE('433'),
 
     NOTICE('NOTICE'), PING('PING'), MODE('MODE'), ERROR('ERROR'), QUIT('QUIT'), JOIN('JOIN'), TOPIC_SET('TOPIC'),
-    PRIVMSG('PRIVMSG')
+    PRIVMSG('PRIVMSG'), PART('PART')
 
     String rCode
     private ResponseType(String rCode) {

@@ -33,6 +33,7 @@ class EventMapper {
         commandMap.put ResponseType.END_OF_MOTD, MOTDEndEvent.class
         commandMap.put ResponseType.WHO_REPLY, WhoReplyEvent.class
         commandMap.put ResponseType.JOIN, JoinEvent.class
+        commandMap.put ResponseType.PART, PartEvent.class
         commandMap.put ResponseType.TOPIC, TopicEvent.class
         commandMap.put ResponseType.TOPIC_TIME, TopicTimeEvent.class
         commandMap.put ResponseType.CHANNEL_URL, ChannelURLEvent.class

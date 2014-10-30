@@ -7,13 +7,13 @@ env:
 notifications:
   irc:
     channels:
-      - irc.esper.net#greet
+      - "irc.esper.net#greet"
     template:
       - "%{repository_name}/%{branch}(%{commit}) #%{build_number}: %{message} - %{duration}"
       - "%{commit_message} - %{author}"
-      - 'Build log: %{build_url}'
-      - 'Revision comparison: %{compare_url}'
-      - 'Test results: http://greetlib.github.io/reports/tests'
+      - "Build log: %{build_url}"
+      - "Revision comparison: %{compare_url}"
+      - "Test results: http://greetlib.github.io/reports/tests"
     skip_join: true
 after_script:
-  - sh scripts/update-gh-pages.sh
+  - "sh scripts/update-gh-pages.sh"
