@@ -36,6 +36,7 @@ class EventMapper {
         commandMap.put ResponseType.TOPIC, TopicEvent.class
         commandMap.put ResponseType.TOPIC_TIME, TopicTimeEvent.class
         commandMap.put ResponseType.CHANNEL_URL, ChannelURLEvent.class
+        commandMap.put ResponseType.PRIVMSG, MessageEvent.class
 
         // Add default
         eventMap.put(ServerResponseEvent.class, { ServerResponse serverResponse, IRCConnection connection ->

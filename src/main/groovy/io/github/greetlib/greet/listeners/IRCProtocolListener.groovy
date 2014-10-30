@@ -12,8 +12,8 @@ import io.github.greetlib.greet.util.CommandUtil
 
 /**
  * Internal listener used for adding data to events
- * and responding to various server requests (most notably a PING)
- * Removing this listener from the EventManager is not recommended
+ * and responding to various server requests. It must remain at the top
+ * of the event stack. Remove this listener from the stack is not recommended.
  * unless a replacement is added.
  */
 @SuppressWarnings(["GroovyUnusedDeclaration", "GrMethodMayBeStatic"])
@@ -56,6 +56,7 @@ class IRCProtocolListener extends BaseEventListener {
         if(event.responseType == null) {
             log.warn "${event.serverResponse.rawData}"
             log.warn "Unknown response code ${event.serverResponse.command}"
+            return
         }
         else {
             log.info event.serverResponse.rawData
@@ -81,19 +82,15 @@ class IRCProtocolListener extends BaseEventListener {
         switch(event.responseType) {
             case ResponseType.JOIN:
                 event.channelInfo = con.getChannelInfo(p[0], true)
-                log.debug event.channelInfo.dump()
                 break
             case ResponseType.TOPIC:
                 event.channelInfo = con.getChannelInfo(p[1], true)
-                log.debug event.channelInfo.dump()
                 break
             case ResponseType.TOPIC_TIME:
                 event.channelInfo = con.getChannelInfo(p[1], true)
-                log.debug event.channelInfo.dump()
                 break
             case ResponseType.CHANNEL_URL:
                 event.channelInfo = con.getChannelInfo(p[1], true)
-                log.debug event.channelInfo.dump()
                 break
         }
     }
@@ -120,18 +117,26 @@ class IRCProtocolListener extends BaseEventListener {
         event.userInfo = userInfo
     }
 
+    /**
+     * Update user and channel info on joins.
+     * @param event
+     */
     @EventHandler
-    void onJoin(JoinEvent joinEvent) {
-        List<String> p = joinEvent.serverResponse.params
-        String nick = joinEvent.serverResponse.source.substring(0,
-                joinEvent.serverResponse.source.indexOf("!")
+    void onJoin(JoinEvent event) {
+        List<String> p = event.serverResponse.params
+        String nick = event.serverResponse.source.substring(0,
+                event.serverResponse.source.indexOf("!")
         )
-        joinEvent.channelInfo.users.add(nick)
-        joinEvent.userInfo = con.getUserInfo(nick, true)
-        joinEvent.userInfo.channels.add(p[1])
-        log.debug "Added $nick to channel ${p[1]}"
+        event.channelInfo.users.add(nick)
+        event.userInfo = con.getUserInfo(nick, true)
+        event.userInfo.channels.add(p[0])
+        log.debug "Added $nick to channel ${p[0]}"
     }
 
+    /**
+     * Update topic set time
+     * @param event
+     */
     @EventHandler
     void onTopicTime(TopicTimeEvent event) {
         List<String> p = event.serverResponse.params
@@ -139,9 +144,32 @@ class IRCProtocolListener extends BaseEventListener {
         event.channelInfo.topicSetTime = p[3].toLong()
     }
 
+    /**
+     * Update channel URL
+     * @param event
+     */
     @EventHandler
     void onUrl(ChannelURLEvent event) {
         event.channelInfo.channelUrl = event.serverResponse.trail
         log.debug "Channel url is ${event.channelInfo.channelUrl}"
+    }
+
+    /**
+     * Update channel topic
+     * @param event
+     */
+    @EventHandler
+    void onTopic(TopicEvent event) {
+        event.channelInfo.topic = event.serverResponse.trail
+        log.debug event.channelInfo.dump()
+    }
+
+    @EventHandler
+    void onMessage(MessageEvent event) {
+        List<String> p = event.serverResponse.params
+        event.destination = p[1]
+        event.message = event.serverResponse.trail
+        event.source = event.serverResponse.source
+        event.isPrivate = (con.clientInfo.nickName == p[1])
     }
 }
