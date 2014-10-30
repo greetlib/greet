@@ -5,5 +5,5 @@ class ClientInfo {
     String userName
     String nickName
     String realName
-    String password
+    String password = ""
 }

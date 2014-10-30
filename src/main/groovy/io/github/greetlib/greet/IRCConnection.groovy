@@ -20,8 +20,8 @@ class IRCConnection {
 
     final ClientInfo clientInfo
     final ServerInfo serverInfo = new ServerInfo()
-    final private Map<String, UserInfo> userInfoMap = new HashMap<>()
-    final private Map<String, ChannelInfo> channelInfoMap = new HashMap<>()
+    final Map<String, UserInfo> userInfoMap = new HashMap<>()
+    final Map<String, ChannelInfo> channelInfoMap = new HashMap<>()
 
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {

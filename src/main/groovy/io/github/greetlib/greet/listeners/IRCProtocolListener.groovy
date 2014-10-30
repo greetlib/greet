@@ -5,6 +5,7 @@ import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.event.EventHandler
 import io.github.greetlib.greet.event.IRCEventListener
 import io.github.greetlib.greet.event.irc.*
+import io.github.greetlib.greet.net.ChannelInfo
 import io.github.greetlib.greet.net.ClientInfo
 import io.github.greetlib.greet.net.ResponseType
 import io.github.greetlib.greet.net.UserInfo
@@ -134,6 +135,10 @@ class IRCProtocolListener extends BaseEventListener {
         log.debug "Added $nick to channel ${p[0]}"
     }
 
+    /**
+     * Update user and channel maps
+     * @param event
+     */
     @EventHandler
     void onPart(PartEvent event) {
         List<String> p = event.serverResponse.params
@@ -142,7 +147,7 @@ class IRCProtocolListener extends BaseEventListener {
         )
         event.channelInfo.users.remove(nick)
         event.userInfo = con.getUserInfo(nick)
-        event.userInfo?.channels?.add(p[0])
+        event.userInfo?.channels?.remove(p[0])
         event.reason = event.serverResponse.trail
         log.debug "Removed $nick from ${p[0]}"
     }
@@ -178,6 +183,10 @@ class IRCProtocolListener extends BaseEventListener {
         log.debug event.channelInfo.dump()
     }
 
+    /**
+     * Set data for MessageEvents
+     * @param event
+     */
     @EventHandler
     void onMessage(MessageEvent event) {
         List<String> p = event.serverResponse.params
@@ -185,5 +194,24 @@ class IRCProtocolListener extends BaseEventListener {
         event.message = event.serverResponse.trail
         event.source = event.serverResponse.source
         event.isPrivate = (con.clientInfo.nickName == p[1])
+    }
+
+    /**
+     * Update user and channel maps
+     * @param event
+     */
+    @EventHandler
+    void onNickChange(NickChangeEvent event) {
+        event.oldNick = event.serverResponse.source.substring(0, event.serverResponse.source.indexOf('!'))
+        event.newNick = event.serverResponse.trail
+        UserInfo userInfo = con.getUserInfo(event.oldNick, true)
+        userInfo.nickname = event.newNick
+        con.userInfoMap.remove(event.oldNick)
+        con.userInfoMap.put(event.newNick, userInfo)
+        for(String channel : userInfo.channels) {
+            ChannelInfo channelInfo = con.channelInfoMap.get(channel)
+            channelInfo.users.remove(event.oldNick)
+            channelInfo.users.add(userInfo.nickname)
+        }
     }
 }
