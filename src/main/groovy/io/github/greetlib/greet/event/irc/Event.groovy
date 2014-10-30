@@ -4,7 +4,7 @@ import io.github.greetlib.greet.IRCConnection
 import io.github.greetlib.greet.net.ResponseType
 import io.github.greetlib.greet.net.ServerResponse
 
-class Event {
+abstract class Event {
     IRCConnection connection
     ServerResponse serverResponse
     ResponseType responseType

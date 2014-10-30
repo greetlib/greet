@@ -21,7 +21,7 @@ class ConnectExample implements IRCEventListener {
         ])
         con = new IRCConnection(info)
         con.eventManager.addListener(this)
-        ChannelFuture c = con.connect "irc.esper.net", 6667
+        ChannelFuture c = con.connect "aperture.esper.net", 6669
         c.sync()
         Channel channel = c.channel()
         channel.closeFuture().sync()
@@ -33,8 +33,8 @@ class ConnectExample implements IRCEventListener {
 
     @EventHandler
     public onConnect(MOTDEndEvent event) {
-        CommandUtil.sendCommand con, "JOIN", ["#botspam"]
-        CommandUtil.sendCommand con, "PRIVMSG", ["#botspam"], "Testing GreetLib - A GRoovy intErnet rElay chaT library"
+        CommandUtil.sendCommand con, "JOIN", ["#Greet"]
+        CommandUtil.sendCommand con, "PRIVMSG", ["#Greet"], "Testing GreetLib - A GRoovy intErnet rElay chaT library"
     }
 
 }

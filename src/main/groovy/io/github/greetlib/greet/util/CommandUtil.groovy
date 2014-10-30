@@ -5,7 +5,7 @@ import io.github.greetlib.greet.IRCConnection
 
 @Log4j2
 class CommandUtil {
-    static sendCommand(IRCConnection con, String cmd, List<String> args, String trail = "") {
+    static String sendCommand(IRCConnection con, String cmd, List<String> args, String trail = "") {
         String raw = "$cmd "
         args.each {
             raw += "$it "

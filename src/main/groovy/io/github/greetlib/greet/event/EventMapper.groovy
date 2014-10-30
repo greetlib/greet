@@ -32,6 +32,10 @@ class EventMapper {
         commandMap.put ResponseType.PING, PingEvent.class
         commandMap.put ResponseType.END_OF_MOTD, MOTDEndEvent.class
         commandMap.put ResponseType.WHO_REPLY, WhoReplyEvent.class
+        commandMap.put ResponseType.JOIN, JoinEvent.class
+        commandMap.put ResponseType.TOPIC, TopicEvent.class
+        commandMap.put ResponseType.TOPIC_TIME, TopicTimeEvent.class
+        commandMap.put ResponseType.CHANNEL_URL, ChannelURLEvent.class
 
         // Add default
         eventMap.put(ServerResponseEvent.class, { ServerResponse serverResponse, IRCConnection connection ->
@@ -79,8 +83,9 @@ class EventMapper {
      * @return Event created by the mapped closure, or a ServerResponseEvent if unmapped
      */
     Event build(ServerResponse serverResponse, IRCConnection connection) {
-        eventMap.get(commandMap.get(ResponseType.byCode(serverResponse.command), ServerResponseEvent.class))
+        Event event = eventMap.get(commandMap.getOrDefault(ResponseType.byCode(serverResponse.command), ServerResponseEvent.class))
                 .call(serverResponse, connection)
+        return event
     }
 
     /**

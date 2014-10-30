@@ -16,6 +16,7 @@ import io.github.greetlib.greet.util.CommandUtil
  * Removing this listener from the EventManager is not recommended
  * unless a replacement is added.
  */
+@SuppressWarnings(["GroovyUnusedDeclaration", "GrMethodMayBeStatic"])
 @Log4j2
 class IRCProtocolListener extends BaseEventListener {
     private IRCEventListener connectionListener = new IRCEventListener() {
@@ -53,8 +54,8 @@ class IRCProtocolListener extends BaseEventListener {
     @EventHandler
     void onServerResponse(ServerResponseEvent event) {
         if(event.responseType == null) {
+            log.warn "${event.serverResponse.rawData}"
             log.warn "Unknown response code ${event.serverResponse.command}"
-            log.warn "Raw: ${event.serverResponse.rawData}"
         }
         else {
             log.info event.serverResponse.rawData
@@ -71,6 +72,33 @@ class IRCProtocolListener extends BaseEventListener {
     }
 
     /**
+     * Fill channelInfo for ChannelEvents
+     * @param event
+     */
+    @EventHandler
+    void onChannelEvent(ChannelEvent event) {
+        List<String> p = event.serverResponse.params
+        switch(event.responseType) {
+            case ResponseType.JOIN:
+                event.channelInfo = con.getChannelInfo(p[0], true)
+                log.debug event.channelInfo.dump()
+                break
+            case ResponseType.TOPIC:
+                event.channelInfo = con.getChannelInfo(p[1], true)
+                log.debug event.channelInfo.dump()
+                break
+            case ResponseType.TOPIC_TIME:
+                event.channelInfo = con.getChannelInfo(p[1], true)
+                log.debug event.channelInfo.dump()
+                break
+            case ResponseType.CHANNEL_URL:
+                event.channelInfo = con.getChannelInfo(p[1], true)
+                log.debug event.channelInfo.dump()
+                break
+        }
+    }
+
+    /**
      * Add {@link UserInfo} to {@link WhoReplyEvent}
      * @param event
      */
@@ -80,12 +108,40 @@ class IRCProtocolListener extends BaseEventListener {
         UserInfo userInfo = con.getUserInfo(p[5], true)
         if(!userInfo.channels.contains(p[1])) {
             userInfo.channels.add(p[1])
+            con.getChannelInfo(p[1], true).users.add(p[1])
         }
         userInfo.username = p[2]
         userInfo.hostname = p[3]
         userInfo.server = p[4]
         userInfo.nickname = p[5]
         userInfo.realName = p.last()
+        log.debug "Added user info:"
+        log.debug userInfo.dump()
         event.userInfo = userInfo
+    }
+
+    @EventHandler
+    void onJoin(JoinEvent joinEvent) {
+        List<String> p = joinEvent.serverResponse.params
+        String nick = joinEvent.serverResponse.source.substring(0,
+                joinEvent.serverResponse.source.indexOf("!")
+        )
+        joinEvent.channelInfo.users.add(nick)
+        joinEvent.userInfo = con.getUserInfo(nick, true)
+        joinEvent.userInfo.channels.add(p[1])
+        log.debug "Added $nick to channel ${p[1]}"
+    }
+
+    @EventHandler
+    void onTopicTime(TopicTimeEvent event) {
+        List<String> p = event.serverResponse.params
+        event.channelInfo.topicSetBy = p[2]
+        event.channelInfo.topicSetTime = p[3].toLong()
+    }
+
+    @EventHandler
+    void onUrl(ChannelURLEvent event) {
+        event.channelInfo.channelUrl = event.serverResponse.trail
+        log.debug "Channel url is ${event.channelInfo.channelUrl}"
     }
 }

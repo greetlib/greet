@@ -82,6 +82,7 @@ class IRCConnection {
         ChannelInfo channelInfo = channelInfoMap.get(channel)
         if(channelInfo == null && createIfNotExists) {
             channelInfo = new ChannelInfo()
+            channelInfo.channelName = channel
             channelInfoMap.put(channel, channelInfo)
         }
         return channelInfo
@@ -98,6 +99,7 @@ class IRCConnection {
         UserInfo userInfo = userInfoMap.get(nick)
         if(userInfo == null && createIfNotExists) {
             userInfo = new UserInfo()
+            userInfo.nickname = nick
             userInfoMap.put(nick, userInfo)
         }
         return userInfo

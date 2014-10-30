@@ -8,11 +8,9 @@ import io.github.greetlib.greet.net.ServerInfo
 class BaseEventListener implements IRCEventListener {
     protected final IRCConnection con
     protected final ServerInfo serverInfo
-    protected final Map<String, ChannelInfo> channelInfoMap;
 
     public BaseEventListener(IRCConnection con) {
         this.con = con
         this.serverInfo = con.serverInfo
-        this.channelInfoMap = con.channelInfoMap
     }
 }
