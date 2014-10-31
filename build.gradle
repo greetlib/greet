@@ -2,33 +2,10 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 
 sourceCompatibility = 1.8
-def mainClassName = "io.github.greetlib.greet.example.ConnectExample"
 version = '1.0'
 
 repositories {
     mavenCentral()
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-}
-
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } } {
-    }
-    with jar
-}
-
-task distZip(type: Zip) {
-    from configurations.runtime.allArtifacts.files
-    into 'lib'
-    from configurations.runtime
 }
 
 dependencies {
