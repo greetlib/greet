@@ -6,4 +6,8 @@ class MessageEvent extends ServerResponseEvent {
     String destination
     String message
     boolean isPrivate
+
+    void reply(String message) {
+        connection.sendMessage(source, message)
+    }
 }
