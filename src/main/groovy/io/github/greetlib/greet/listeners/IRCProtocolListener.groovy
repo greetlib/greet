@@ -20,19 +20,6 @@ import io.github.greetlib.greet.util.CommandUtil
 @SuppressWarnings(["GroovyUnusedDeclaration", "GrMethodMayBeStatic"])
 @Log4j2
 class IRCProtocolListener extends BaseEventListener {
-    private IRCEventListener connectionListener = new IRCEventListener() {
-        @EventHandler
-        void onNotice(NoticeEvent event) {
-            new Timer().runAfter(5000) {
-                ClientInfo clientInfo = con.clientInfo
-                CommandUtil.sendCommand con, "PASS", [clientInfo.password]
-                CommandUtil.sendCommand con, "USER", [clientInfo.userName, '0', '*'], clientInfo.realName
-                CommandUtil.sendCommand con, "NICK", [clientInfo.nickName]
-            }
-            con.eventManager.removeListener(this)
-        }
-    }
-
     IRCProtocolListener(IRCConnection con) {
         super(con)
     }
@@ -45,7 +32,14 @@ class IRCProtocolListener extends BaseEventListener {
     @EventHandler
     void onConnected(ConnectionEvent event) {
         // Wait for server to send connection notices
-        con.eventManager.addListener(connectionListener)
+        new Timer().runAfter(10000) {
+            ClientInfo clientInfo = con.clientInfo
+            if(clientInfo.password) {
+                CommandUtil.sendCommand con, "PASS", [clientInfo.password]
+            }
+            CommandUtil.sendCommand con, "USER", [clientInfo.userName, '0', '*'], clientInfo.realName
+            CommandUtil.sendCommand con, "NICK", [clientInfo.nickName]
+        }
     }
 
     /**

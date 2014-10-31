@@ -5,6 +5,7 @@ import io.github.greetlib.greet.event.EventManager
 import io.github.greetlib.greet.listeners.IRCProtocolListener
 import io.github.greetlib.greet.listeners.ServerInfoListener
 import io.github.greetlib.greet.net.*
+import io.github.greetlib.greet.util.CommandUtil
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.*
 import io.netty.channel.nio.NioEventLoopGroup
@@ -103,6 +104,40 @@ class IRCConnection {
             userInfoMap.put(nick, userInfo)
         }
         return userInfo
+    }
+
+    /**
+     * Join a channel
+     * @param channel
+     */
+    void join(String channel) {
+        CommandUtil.sendCommand this, "JOIN", [channel]
+        CommandUtil.sendCommand this, "WHO", [channel]
+    }
+
+    /**
+     * Leave a channel
+     * @param channel
+     */
+    void part(String channel) {
+        CommandUtil.sendCommand this, "PART", [channel]
+        channelInfoMap.remove(channel)
+    }
+
+    /**
+     * Change nickname
+     * @param nick
+     */
+    void setNick(String nick) {
+        CommandUtil.sendCommand this, "NICK", [nick]
+    }
+
+    /**
+     * Send a message to a user or channel
+     * @param dest
+     */
+    void sendMessage(String dest, String msg) {
+        CommandUtil.sendCommand this, "PRIVMSG", [dest], msg
     }
 
 }
