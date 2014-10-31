@@ -24,6 +24,8 @@ class IRCConnection {
     final Map<String, UserInfo> userInfoMap = new HashMap<>()
     final Map<String, ChannelInfo> channelInfoMap = new HashMap<>()
 
+    private String host
+
     private class IRCInitializer extends ChannelInitializer {
         protected void initChannel(Channel ch) throws Exception {
             ch.pipeline().addLast(
@@ -49,6 +51,7 @@ class IRCConnection {
     }
 
     ChannelFuture connect(String host, int port) {
+        this.host = host;
         if (bootStrap != null) {
             log.info "Shutting down previous connection."
             workerGroup.shutdownGracefully()
@@ -104,6 +107,13 @@ class IRCConnection {
             userInfoMap.put(nick, userInfo)
         }
         return userInfo
+    }
+
+    /**
+     * @return The host or ip passed to {@link #connect(java.lang.String, int)}
+     */
+    public String getHost() {
+        return host
     }
 
     /**
