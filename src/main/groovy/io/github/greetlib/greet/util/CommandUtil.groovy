@@ -10,7 +10,9 @@ class CommandUtil {
         args.each {
             raw += "$it "
         }
-        if(trail) raw += ":$trail"
+        if(trail) {
+            raw += ":$trail".trim().replaceAll("\n", "").replaceAll("\r", "")
+        }
         raw += "\r\n"
         con.channel.writeAndFlush(raw)
         log.debug raw.trim()
