@@ -8,4 +8,5 @@ class ChannelInfo {
     String topicSetBy
     String channelUrl
     long topicSetTime
+    HashMap<String, Object> extras = new HashMap<>()
 }

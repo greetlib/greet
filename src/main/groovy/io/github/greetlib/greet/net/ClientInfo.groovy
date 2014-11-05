@@ -6,4 +6,5 @@ class ClientInfo {
     String nickName
     String realName
     String password = ""
+    String networkAlias
 }

@@ -124,8 +124,13 @@ class IRCProtocolListener extends BaseEventListener {
         )
         event.channelInfo.users.add(nick)
         event.userInfo = con.getUserInfo(nick, true)
-        event.userInfo.channels.add(p[0])
-        log.debug "Added $nick to channel ${p[0]}"
+        if(p[0] != null) {
+            event.userInfo.channels.add(p[0])
+            log.debug "Added $nick to channel ${p[0]}"
+        } else {
+            event.userInfo.channels.add(event.serverResponse.trail)
+            log.debug "Added $nick to channel ${event.serverResponse.trail}"
+        }
     }
 
     /**
@@ -183,10 +188,13 @@ class IRCProtocolListener extends BaseEventListener {
     @EventHandler
     void onMessage(MessageEvent event) {
         List<String> p = event.serverResponse.params
-        event.destination = p[1]
+        event.destination = p[0]
         event.message = event.serverResponse.trail
-        event.source = event.serverResponse.source
-        event.isPrivate = (con.clientInfo.nickName == p[1])
+        event.isPrivate = (con.clientInfo.nickName == p[0])
+        if(event.isPrivate) {
+            event.source = event.serverResponse.source.substring(0, event.serverResponse.source.lastIndexOf("!"))
+        }
+        else event.source = event.destination
     }
 
     /**

@@ -19,13 +19,13 @@ class ResponseAdapter extends ChannelHandlerAdapter {
             log.warn "Received empty string from decoder."
             return
         }
-        List<String> parts = msg.split(":", 2)
+        List<String> parts = msg.split(":", 3)
         List<String> cmdParts = parts[1].split(" ")
         List<String> params = [];
         if(cmdParts.size() > 2) params = cmdParts.subList(2, cmdParts.size())
-        String trail = '';
+        String trail = ''
+        if(parts.size() > 1) trail = parts[2]
         if(params && params.last().startsWith(":")) {
-            trail = params.last().substring(1)
             params = params.subList(0, params.size()-1)
         }
 
