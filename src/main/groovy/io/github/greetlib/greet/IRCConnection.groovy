@@ -151,4 +151,9 @@ class IRCConnection {
         CommandUtil.sendCommand this, "PRIVMSG", [dest], msg
     }
 
+    public void shutdown() {
+        channel.close().sync()
+        workerGroup.shutdownGracefully().wait()
+    }
+
 }
