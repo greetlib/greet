@@ -73,6 +73,7 @@ class IRCProtocolListener extends BaseEventListener {
     @EventHandler
     void onChannelEvent(ChannelEvent event) {
         List<String> p = event.serverResponse.params
+        log.debug event.dump()
         switch(event.responseType) {
             case ResponseType.JOIN:
             case ResponseType.PART:

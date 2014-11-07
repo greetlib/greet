@@ -88,6 +88,7 @@ class IRCConnection {
             channelInfo = new ChannelInfo()
             channelInfo.channelName = channel
             channelInfoMap.put(channel, channelInfo)
+            log.debug "Created channel ${channel}"
         }
         return channelInfo
     }
