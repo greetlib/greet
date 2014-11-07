@@ -77,7 +77,8 @@ class IRCProtocolListener extends BaseEventListener {
         switch(event.responseType) {
             case ResponseType.JOIN:
             case ResponseType.PART:
-                event.channelInfo = con.getChannelInfo(p[0], true)
+                if(p) event.channelInfo = con.getChannelInfo(p[0], true)
+                else event.channelInfo = con.getChannelInfo(event.serverResponse.trail, true)
                 break
             case ResponseType.TOPIC:
                 event.channelInfo = con.getChannelInfo(p[1], true)
